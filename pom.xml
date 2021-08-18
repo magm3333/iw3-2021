@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>iw3</name>
 	<description>Backend IW3</description>
-	<packaging>${packaging.type}</packaging>
+	<packaging>${packaging.type}</packaging> 
 	
 	<properties>
 		<java.version>11</java.version>
@@ -88,6 +88,12 @@
 	    	<id>mysqldev</id>
 	    	<properties>
 				<spring.profiles.active>mysqldev</spring.profiles.active>
+			</properties>
+	    </profile>
+	    <profile>
+	    	<id>mysqlprod</id>
+	    	<properties>
+				<spring.profiles.active>mysqlprod</spring.profiles.active>
 			</properties>
 	    </profile>
 		<profile>
