@@ -69,6 +69,31 @@ public class ProductoNegocio implements IProductoNegocio {
 
 	}
 
+	@Override
+	public Producto modificar(Producto producto) throws NegocioException, NoEncontradoException {
+
+		cargar(producto.getId());
+
+		try {
+			return productoDAO.save(producto);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new NegocioException(e);
+		}
+	}
+
+	@Override
+	public void eliminar(long id) throws NegocioException, NoEncontradoException {
+		cargar(id);
+
+		try {
+			productoDAO.deleteById(id);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new NegocioException(e);
+		}
+	}
+
 	// @Bean
 	// public IProductoNegocio getProductoNegocio() {
 	// return new ProductoNegocio();
