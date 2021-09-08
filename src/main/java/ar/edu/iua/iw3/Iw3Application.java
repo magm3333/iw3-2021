@@ -6,8 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ar.edu.iua.iw3.demo.perfiles.IPruebaPerfil;
+import ar.edu.iua.iw3.modelo.cuentas.IUserNegocio;
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class Iw3Application extends SpringBootServletInitializer implements CommandLineRunner{
 
@@ -18,9 +20,19 @@ public class Iw3Application extends SpringBootServletInitializer implements Comm
 	@Autowired
 	private IPruebaPerfil pruebaPerfil;
 	
+	@Autowired
+	private PasswordEncoder pwdEncoder;
+	
+	//@Autowired
+	//private IUserNegocio userNegocio;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		pruebaPerfil.mensaje();
+		
+		System.out.println(pwdEncoder.encode("123"));
+		
+		//System.out.println(userNegocio.cargarPorNombreOEmail("user").getEmail());
 		
 	}
 
