@@ -1,7 +1,6 @@
 package ar.edu.iua.iw3.modelo.cuentas;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -17,10 +16,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Table(name="users")
@@ -173,5 +174,26 @@ public class User implements UserDetails, Serializable {
 	 * - r3 =>  -  -  -  -  ====>  SGA(r1) SGA(r12) SGA(r3) SGA(r4) =>   - SGA(r3)
 	 * - r4                                                              - SGA(r4)
 	 */
+	
+	
+	public String checkAccount(PasswordEncoder passwordEncoder, String password) {
+		if (!passwordEncoder.matches(password, getPassword()))
+			return "BAD_PASSWORD";
+		if (!isEnabled())
+			return "ACCOUNT_NOT_ENABLED";
+		if (!isAccountNonLocked())
+			return "ACCOUNT_LOCKED";
+		if (!isCredentialsNonExpired())
+			return "CREDENTIALS_EXPIRED";
+		if (!isAccountNonExpired())
+			return "ACCOUNT_EXPIRED";
+
+		return null;
+	}
+	
+	@Transient
+	public String getNombreCompleto() {
+		return String.format("%s, %s", getApellido(), getNombre());
+	}
 
 }
