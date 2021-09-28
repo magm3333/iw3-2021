@@ -121,6 +121,8 @@ public class User implements UserDetails, Serializable {
 	}
 
 	public void setAccountNonLocked(boolean accountNonLocked) {
+		if(accountNonLocked)
+			setIntentosFallidos(0);
 		this.accountNonLocked = accountNonLocked;
 	}
 
@@ -177,8 +179,7 @@ public class User implements UserDetails, Serializable {
 	
 	
 	public String checkAccount(PasswordEncoder passwordEncoder, String password) {
-		if (!passwordEncoder.matches(password, getPassword()))
-			return "BAD_PASSWORD";
+		
 		if (!isEnabled())
 			return "ACCOUNT_NOT_ENABLED";
 		if (!isAccountNonLocked())
@@ -187,7 +188,8 @@ public class User implements UserDetails, Serializable {
 			return "CREDENTIALS_EXPIRED";
 		if (!isAccountNonExpired())
 			return "ACCOUNT_EXPIRED";
-
+		if (!passwordEncoder.matches(password, getPassword()))
+			return "BAD_PASSWORD";
 		return null;
 	}
 	
@@ -195,5 +197,37 @@ public class User implements UserDetails, Serializable {
 	public String getNombreCompleto() {
 		return String.format("%s, %s", getApellido(), getNombre());
 	}
+	
+	private int duracionToken;
+	private int intentosFallidos;
+	
+	private static int MAXIMO_INTENTOS_FALLIDOS=3;
+	public void agregaIntentoFallido() {
+		intentosFallidos++;
+		if(intentosFallidos>=MAXIMO_INTENTOS_FALLIDOS) {
+			setIntentosFallidos(0);
+			setAccountNonLocked(false);
+		}
+	}
+
+
+
+	public int getDuracionToken() {
+		return duracionToken;
+	}
+
+	public void setDuracionToken(int duracionToken) {
+		this.duracionToken = duracionToken;
+	}
+
+	public int getIntentosFallidos() {
+		return intentosFallidos;
+	}
+
+	public void setIntentosFallidos(int intentosFallidos) {
+		this.intentosFallidos = intentosFallidos;
+	}
+	
+	
 
 }

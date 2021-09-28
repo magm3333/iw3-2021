@@ -22,6 +22,9 @@ import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 import ar.edu.iua.iw3.security.authtoken.AuthToken;
 import ar.edu.iua.iw3.security.authtoken.IAuthTokenBusiness;
 
+//Sección Test del login-json de Postman
+//var jsonData = pm.response.json();
+//pm.globals.set("tokenIW3", jsonData.authtoken);
 public class CustomTokenAuthenticationFilter extends OncePerRequestFilter {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -43,6 +46,9 @@ public class CustomTokenAuthenticationFilter extends OncePerRequestFilter {
 	public static String AUTH_HEADER1 = "XAUTHTOKEN";
 	public static String AUTH_PARAMETER = "xauthtoken";
 	public static String AUTH_PARAMETER1 = "token";
+	
+	public static String AUTH_PARAMETER_AUTHORIZATION = "Authorization";
+
 
 	private boolean esValido(String valor) {
 		return valor != null && valor.trim().length() > 10;
@@ -58,7 +64,10 @@ public class CustomTokenAuthenticationFilter extends OncePerRequestFilter {
 		}
 		String header = request.getHeader(AUTH_HEADER);
 		if (!esValido(header)) {
-			header = request.getHeader(AUTH_HEADER1);
+			header = request.getHeader(AUTH_PARAMETER_AUTHORIZATION);
+			if(header!=null && header.toLowerCase().startsWith("bearer ")) {
+				header=header.substring("Bearer ".length());
+			} 
 		}
 		if (!esValido(parameter) && !esValido(header)) {
 			chain.doFilter(request, response);
@@ -87,7 +96,7 @@ public class CustomTokenAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		// A partir de aquí, se considera que se envió el el token y es propritario, por
+		// A partir de aquí, se considera que se envió el token, por
 		// ende si no está ok, login inválido
 
 		try {
@@ -112,6 +121,7 @@ public class CustomTokenAuthenticationFilter extends OncePerRequestFilter {
 					authTokenBusiness.delete(authToken);
 				}
 				if (authToken.getType().equals(AuthToken.TYPE_FROM_TO_DATE)) {
+					//Solo se chequea si se comenzó el período, porque puede ser a futuro
 					if (authToken.getTo().getTime() < System.currentTimeMillis()) {
 						authTokenBusiness.delete(authToken);
 					}
@@ -121,7 +131,6 @@ public class CustomTokenAuthenticationFilter extends OncePerRequestFilter {
 			}
 			SecurityContextHolder.clearContext();
 			log.debug("El Token " + token + " ha expirado");
-			// throw new ServletException("El Token ha expirado. Token=" + token);
 			chain.doFilter(request, response);
 			return;
 		}

@@ -36,8 +36,11 @@ public class UserNegocio implements IUserNegocio {
 
 	@Override
 	public User modificar(User user) throws NegocioException, EncontradoException, NoEncontradoException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return userDAO.save(user);
+		} catch (Exception e) {
+			throw new NegocioException(e);
+		}
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.iua.iw3.modelo.cuentas.IUserNegocio;
 import ar.edu.iua.iw3.modelo.cuentas.User;
+import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
 
@@ -37,6 +38,13 @@ public class CoreRestController extends BaseRestController{
 			User u = userBusiness.cargarPorNombreOEmail(username);
 			String msg = u.checkAccount(passwordEncoder, password);
 			if (msg != null) {
+				u.agregaIntentoFallido();
+				try {
+					userBusiness.modificar(u);
+				} catch (EncontradoException e) {
+					log.error(e.getMessage());
+					return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+				}
 				return new ResponseEntity<String>(msg, HttpStatus.UNAUTHORIZED);
 			} else {
 				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(u, null,
@@ -61,6 +69,13 @@ public class CoreRestController extends BaseRestController{
 			User u = userBusiness.cargarPorNombreOEmail(username);
 			String msg = u.checkAccount(passwordEncoder, password);
 			if (msg != null) {
+				u.agregaIntentoFallido();
+				try {
+					userBusiness.modificar(u);
+				} catch (EncontradoException e) {
+					log.error(e.getMessage());
+					return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+				}
 				return new ResponseEntity<String>(msg, HttpStatus.UNAUTHORIZED);
 			} else {
 				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(u, null,

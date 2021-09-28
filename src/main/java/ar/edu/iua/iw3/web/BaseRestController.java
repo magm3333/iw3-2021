@@ -16,20 +16,20 @@ import ar.edu.iua.iw3.security.authtoken.IAuthTokenBusiness;
 
 public class BaseRestController {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	private IAuthTokenBusiness authTokenBusiness;
-	
+
 	protected User getUserLogged() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		return user;
 	}
-	
+
 	protected JSONObject userToJson(User u) {
-		//AuthToken token = new AuthToken(sessionTimeout, u.getUsername());
-		//AuthToken token = new AuthToken(u.getSessionTimeout(), u.getUsername());
-		AuthToken token = new AuthToken(300, u.getUsername());
+		// AuthToken token = new AuthToken(sessionTimeout, u.getUsername());
+		// AuthToken token = new AuthToken(u.getSessionTimeout(), u.getUsername());
+		AuthToken token = new AuthToken(u.getDuracionToken() == 0 ? 300 : u.getDuracionToken(), u.getUsername());
 		String tokenValue = null;
 		try {
 			authTokenBusiness.save(token);
