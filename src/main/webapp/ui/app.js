@@ -1,6 +1,6 @@
 var app=angular.module('iw3',['ngRoute','productos']);
 
-
+/*
 angular.module('iw3').controller('ControladorDiv1',function($scope){
 	$scope.titulo="Hola desde el controller 1";
 	
@@ -15,6 +15,6 @@ app.controller('ControladorDiv2',function($scope){
 
 	
 });
-
+*/
 // Double binding
 // Vista <-$scope-> Controller

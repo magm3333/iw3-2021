@@ -1,3 +1,3 @@
-angular.module('productos').controller('Productos',($scope)=>{
+angular.module('productos').controller('Productos',function($scope){
 	$scope.titulo='Productos';
 });

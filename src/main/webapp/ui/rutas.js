@@ -1,4 +1,4 @@
-angular.module('iw3').config(($routeProvider, $locationProvider)=>{
+angular.module('iw3').config(function($routeProvider, $locationProvider){
 	$locationProvider.hashPrefix('!');
 	$routeProvider
 		.when('/main',{
