@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="magm">
+<link rel="icon" type="image/png" href="favicon.png" sizes="32x32">
+
+<script type="text/javascript" src="ui/lib/angular/angular.min.js"></script>
+<script type="text/javascript" src="ui/lib/angular-route/angular-route.min.js"></script>
+
+<script type="text/javascript" src="ui/app.js"></script>
+<script type="text/javascript" src="ui/rutas.js"></script>
+<script type="text/javascript" src="ui/modulos/productos/productos-module.js"></script>
+<script type="text/javascript" src="ui/modulos/productos/productos-controller.js"></script>
+
+<script type="text/javascript" src="ui/controladores/main-controller.js"></script>
+
+
+<title>IW3</title>
+</head>
+<body ng-app="iw3">
+	<!-- 
+	<div ng-controller="ControladorDiv1">
+		<h3>{{titulo}}</h3>
+		<p>Size: {{datos.size}}</p>
+		<p>
+			Tamaño de letra: <input type="number" ng-model="datos.size">
+		</p>
+		<p style="font-size: {{datos.size">Este es el primer ejemplo de
+			Angular 1</p>
+
+	</div>
+	<div ng-controller="ControladorDiv2">
+		<h3>{{titulo}}</h3>
+	</div>
+-->
+	<div style="height: 100%; width: 100%" ng-view=""></div>
+
+
+</body>
+</html>
