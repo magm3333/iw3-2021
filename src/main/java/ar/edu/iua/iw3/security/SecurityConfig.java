@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers("/favicon.png").permitAll();
 		http.authorizeRequests().antMatchers("/ui/**").permitAll();
 		
-		http.authorizeRequests().antMatchers("/productos*").hasRole("ADMIN");
+		//http.authorizeRequests().antMatchers("/productos*").permitAll(); //.hasRole("ADMIN");
 		
 		http.authorizeRequests().antMatchers("/test*").hasAnyRole("ADMIN","USER");
 		
