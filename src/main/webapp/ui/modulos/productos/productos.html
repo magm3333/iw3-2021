@@ -1,25 +1,30 @@
 <h2>{{titulo}}</h2>
 
+
+<button ng-click="refresh()" class="btn btn-success">Refrescar</button>
+<br/>
 Buscar:
 <input type="text" ng-model="textoBuscado" />
+<br/>
+<button ng-click="addEdit(false)" class="btn btn-success">Agregar</button>
 
-<ol>
-	<li ng-repeat="p in lista | filter:textoBuscado">{{p.id}} -
-		{{p.descripcion}} - $ {{p.precio}}</li>
 
-</ol>
-
-<table border="1">
+<table style="margin-top: 20px" class="table table-hover">
 	<tr>
 		<td>ID</td>
 		<td>Descripción</td>
 		<td>Precio</td>
 		<td>Rubro</td>
+		<td>Opciones</td>
 	</tr>
 	<tr ng-repeat="p in lista | filter:textoBuscado">
 		<td>{{p.id}}</td>
 		<td>{{p.descripcion}}</td>
 		<td>{{p.precio | number:2}}</td>
 		<td>{{p.rubro.rubro}}</td>
+		<td>
+			<button class="btn btn-primary pull-right" ng-click="addEdit(p)">Edit</button>
+			<button class="btn btn-danger pull-right" ng-click="remove(p)">Remove</button>
+		</td>
 	</tr>
 </table>

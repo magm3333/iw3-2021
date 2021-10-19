@@ -1,4 +1,4 @@
-angular.module('iw3').factory('CoreService',function($http,URL_BASE,$log){
+angular.module('iw3').factory('CoreService',function($http,URL_BASE,$log,$localStorage){
 	return {
 		login: function(user) {
 			const config={
@@ -13,6 +13,11 @@ angular.module('iw3').factory('CoreService',function($http,URL_BASE,$log){
 		authInfo:function(){
 			//$log.log()
 			return $http.get(URL_BASE+"/auth-info");
+		},
+		logout: function() {
+			delete $localStorage.userdata;
+			$localStorage.logged=false;
+			$http.get(URL_BASE+"/auth-info");
 		}
 	};
 });
