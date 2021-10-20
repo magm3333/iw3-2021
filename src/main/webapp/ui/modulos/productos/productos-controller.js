@@ -2,6 +2,15 @@ angular.module('productos').controller('Productos',
 	function($scope,ProductosService, $uibModal, SweetAlert, Notification){
 	$scope.titulo='Productos';
 
+	$scope.verItemsPorPagina = 3;
+ 	$scope.totalDeItems = 0;
+  	$scope.paginaActual = 1;
+  	$scope.itemsPorPagina = $scope.verItemsPorPagina;
+	$scope.setItemsPorPagina = function(num) {
+		$scope.itemsPorPagina = num;
+		$scope.paginaActual = 1;
+	};//End setItemsPorPagina()
+
 	$scope.lista=[];
 	
 	$scope.refresh = function() {
@@ -9,6 +18,7 @@ angular.module('productos').controller('Productos',
 			function(resp){
 				if(resp.status==200) {
 					$scope.lista=resp.data;
+					$scope.totalDeItems = $scope.lista.length;
 				}
 				console.log(resp);
 			},
@@ -88,7 +98,7 @@ angular.module('productos').controller('Productos',
 });
 
 angular.module('productos').controller('AgregaEditaProductoModal',
-	function($uibModalInstance, producto){
+	function($uibModalInstance, producto, ProductosService){
 		console.log(producto)
 		var $ctrl=this;
 		$ctrl.agregar=!producto;
@@ -96,7 +106,7 @@ angular.module('productos').controller('AgregaEditaProductoModal',
 		console.log('=>',$ctrl.agregar)
 		
 		if(!producto) {
-			producto={descripcionExtendida:'', descripcion:'', precio: 0.0, enStock:false};
+			producto={rubro: null ,descripcionExtendida:'', descripcion:'', precio: 0.0, enStock:false};
 		}
 		
 		$ctrl.instancia=producto;
@@ -113,4 +123,17 @@ angular.module('productos').controller('AgregaEditaProductoModal',
 		$ctrl.verGuardar=function() {
 			return $ctrl.instancia.descripcion.length>2 && $ctrl.instancia.precio>0;
 		};
+		
+		$ctrl.rubros=[];
+		ProductosService.listaRubros().then(
+			function(resp){
+				if(resp.status==200) {
+					$ctrl.rubros=resp.data;
+				}
+				console.log(resp);
+			},
+			function(err){
+				console.log(err);
+			}
+		);
 	});

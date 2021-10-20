@@ -8,9 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.edu.iua.iw3.demo.perfiles.PruebaPerfilH2Mem;
 import ar.edu.iua.iw3.modelo.Producto;
+import ar.edu.iua.iw3.modelo.Rubro;
 import ar.edu.iua.iw3.modelo.persistencia.ProductoRepository;
+import ar.edu.iua.iw3.modelo.persistencia.RubroRepository;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
 import ar.edu.iua.iw3.negocio.excepciones.NoEncontradoException;
@@ -21,6 +22,9 @@ public class ProductoNegocio implements IProductoNegocio {
 	private Logger log = LoggerFactory.getLogger(ProductoNegocio.class);
 	@Autowired
 	private ProductoRepository productoDAO;
+	
+	@Autowired
+	private RubroRepository rubroDAO;
 
 	// IoC
 	// A y B
@@ -88,6 +92,16 @@ public class ProductoNegocio implements IProductoNegocio {
 
 		try {
 			productoDAO.deleteById(id);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new NegocioException(e);
+		}
+	}
+
+	@Override
+	public List<Rubro> listadoRubros() throws NegocioException {
+		try {
+			return rubroDAO.findAll();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);

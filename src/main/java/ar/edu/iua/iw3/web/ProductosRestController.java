@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.iua.iw3.modelo.Producto;
+import ar.edu.iua.iw3.modelo.Rubro;
 import ar.edu.iua.iw3.negocio.IProductoNegocio;
 import ar.edu.iua.iw3.negocio.excepciones.EncontradoException;
 import ar.edu.iua.iw3.negocio.excepciones.NegocioException;
@@ -92,4 +93,14 @@ public class ProductosRestController {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		}
 	}
+
+	@GetMapping(value="/rubros")
+	public ResponseEntity<List<Rubro>> listadoRubros() {
+		try {
+			return new ResponseEntity<List<Rubro>>(productoNegocio.listadoRubros(), HttpStatus.OK);
+		} catch (NegocioException e) {
+			return new ResponseEntity<List<Rubro>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

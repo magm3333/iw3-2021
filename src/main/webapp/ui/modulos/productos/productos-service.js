@@ -11,6 +11,9 @@ angular.module('productos').factory('ProductosService',function($http, URL_BASE)
 		},
 		remove:function(p) {
 			return $http.delete(URL_BASE+'/productos/'+p.id);
-		}
+		},
+		listaRubros:function() {
+			return $http.get(URL_BASE+'/rubros');			
+		},
 	};
 });
