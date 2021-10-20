@@ -1,6 +1,9 @@
 var app=angular.module('iw3',[
 	'ngRoute','productos',
-	'ui.bootstrap','ngStorage','oitozero.ngSweetAlert'
+	'ui.bootstrap','ngStorage','oitozero.ngSweetAlert',
+	'ngSanitize', 'ngAnimate', 'ngTouch', 
+	'chart.js', 'ngStomp'
+	
 	]);
 
 app.constant('URL_BASE','http://localhost:8080');

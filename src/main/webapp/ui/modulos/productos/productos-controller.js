@@ -1,5 +1,5 @@
 angular.module('productos').controller('Productos',
-	function($scope,ProductosService, $uibModal, SweetAlert){
+	function($scope,ProductosService, $uibModal, SweetAlert, Notification){
 	$scope.titulo='Productos';
 
 	$scope.lista=[];
@@ -21,15 +21,29 @@ angular.module('productos').controller('Productos',
 	$scope.refresh();
 	
 	$scope.remove=function(p) {
-		ProductosService.remove(p).then(
-			function(resp){
-				$scope.refresh();
-				SweetAlert.swal( "Se eliminó correctamente el producto", "Eliminado OK");
-			},
-			function(err){
-				SweetAlert.swal( "Problemas eliminando el producto",err, "Error");
-			}
-		);
+		SweetAlert.swal({
+				title: "Eliminar producto",
+				text: "Está segur@ que desea eliminar el producto <strong>"+p.descripcion+"</strong>?",
+				type: "warning",
+			    showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Si, eliminar producto!",
+				cancelButtonText: "No",
+				closeOnConfirm: true,
+				html: true
+			}, function(confirm){
+				if(confirm) {
+					ProductosService.remove(p).then(
+						function(resp) {
+							$scope.refresh();
+							Notification.success({message:'El producto se ha eliminado',title:'Operación existosa!'});
+						}, 
+						function(err) {
+							Notification.error({message:'No se ha podido eliminar el producto',title:'Operación fallida!'});
+						}
+					);
+				}
+			});
 	};
 	$scope.addEdit=function(p) {
 		var modalInstance = $uibModal.open({
@@ -48,22 +62,22 @@ angular.module('productos').controller('Productos',
 			function(instancia){
 				if(!p) { //Agregar
 					ProductosService.add(instancia).then(
-						function(resp){
+						function(resp) {
 							$scope.refresh();
-							SweetAlert.swal( "Se agregó correctamente el producto", "Agregado OK");
-						},
-						function(err){
-							SweetAlert.swal( "Problemas agregando el producto",err, "Error");
+							Notification.success({message:'El producto se agregó correctamente',title:'Operación existosa!'});
+						}, 
+						function(err) {
+							Notification.error({message:'No se ha podido agregar el producto',title:'Operación fallida!'});
 						}
 					);
 				} else { //Editar
 					ProductosService.edit(instancia).then(
-						function(resp){
+						function(resp) {
 							$scope.refresh();
-							SweetAlert.swal( "Se editó correctamente el producto", "Agregado OK");
-						},
-						function(err){
-							SweetAlert.swal( "Problemas editando el producto",err, "Error");
+							Notification.success({message:'El producto se modificó correctamente',title:'Operación existosa!'});
+						}, 
+						function(err) {
+							Notification.error({message:'No se ha podido modificar el producto',title:'Operación fallida!'});
 						}
 					);
 				}

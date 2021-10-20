@@ -15,6 +15,7 @@ Buscar:
 		<td>Descripción</td>
 		<td>Precio</td>
 		<td>Rubro</td>
+		<td>Stock?</td>
 		<td>Opciones</td>
 	</tr>
 	<tr ng-repeat="p in lista | filter:textoBuscado">
@@ -22,6 +23,7 @@ Buscar:
 		<td>{{p.descripcion}}</td>
 		<td>{{p.precio | number:2}}</td>
 		<td>{{p.rubro.rubro}}</td>
+		<td><i ng-show="p.enStock" class="glyphicon glyphicon-ok"></i></td>
 		<td>
 			<button class="btn btn-primary pull-right" ng-click="addEdit(p)">Edit</button>
 			<button class="btn btn-danger pull-right" ng-click="remove(p)">Remove</button>
