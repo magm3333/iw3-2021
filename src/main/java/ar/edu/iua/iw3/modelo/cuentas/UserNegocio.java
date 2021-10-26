@@ -24,8 +24,11 @@ public class UserNegocio implements IUserNegocio {
 
 	@Override
 	public List<User> lista() throws NegocioException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return userDAO.findAll();
+		} catch (Exception e) {
+			throw new NegocioException(e);
+		}
 	}
 
 	@Override
