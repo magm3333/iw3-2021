@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import ar.edu.iua.iw3.eventos.ProductoEvent;
 import ar.edu.iua.iw3.modelo.Producto;
 import ar.edu.iua.iw3.modelo.Rubro;
 import ar.edu.iua.iw3.modelo.persistencia.ProductoRepository;
@@ -76,7 +78,10 @@ public class ProductoNegocio implements IProductoNegocio {
 	@Override
 	public Producto modificar(Producto producto) throws NegocioException, NoEncontradoException {
 
-		cargar(producto.getId());
+		Producto old=cargar(producto.getId());
+		if(old.getPrecio() <producto.getPrecio()*.9) {
+			generaEvento(producto, ProductoEvent.Tipo.SUBE_PRECIO);
+		}
 
 		try {
 			return productoDAO.save(producto);
@@ -84,6 +89,13 @@ public class ProductoNegocio implements IProductoNegocio {
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);
 		}
+	}
+	
+	@Autowired
+	private ApplicationEventPublisher appEventPublisher;
+	
+	private void generaEvento(Producto producto, ProductoEvent.Tipo tipo) {
+		appEventPublisher.publishEvent(new ProductoEvent(producto, tipo));
 	}
 
 	@Override
