@@ -15,11 +15,36 @@ import javax.persistence.Table;
 @Table(name = "productos")
 public class Producto implements Serializable {
 	private static final long serialVersionUID = -4533737025960198404L;
+	
+	public Producto() {
+	}
 
+	public Producto(Producto producto) {
+		setCodigoExterno(producto.getCodigoExterno());
+		setDescripcion(producto.getDescripcion());
+		setPrecio(producto.getPrecio());
+		setDescripcionExtendida(producto.getDescripcionExtendida());
+		setEnStock(producto.isEnStock());
+		setRubro(producto.getRubro());
+		//Aquí colocar el resto de los atributos del producto que se quieran copiar
+	}
+
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
+	@Column(length = 50, nullable = true, unique=true)
+	private String codigoExterno;
+	
+	public String getCodigoExterno() {
+		return codigoExterno;
+	}
+
+	public void setCodigoExterno(String codigoExterno) {
+		this.codigoExterno = codigoExterno;
+	}
+
 	@Column(length = 100, nullable = false, unique = true)
 	private String descripcion;
 

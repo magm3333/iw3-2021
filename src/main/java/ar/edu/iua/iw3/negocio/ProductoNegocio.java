@@ -24,7 +24,7 @@ public class ProductoNegocio implements IProductoNegocio {
 	private Logger log = LoggerFactory.getLogger(ProductoNegocio.class);
 	@Autowired
 	private ProductoRepository productoDAO;
-	
+
 	@Autowired
 	private RubroRepository rubroDAO;
 
@@ -78,8 +78,8 @@ public class ProductoNegocio implements IProductoNegocio {
 	@Override
 	public Producto modificar(Producto producto) throws NegocioException, NoEncontradoException {
 
-		Producto old=cargar(producto.getId());
-		if(old.getPrecio() <producto.getPrecio()*.9) {
+		Producto old = cargar(producto.getId());
+		if (old.getPrecio() < producto.getPrecio() * .9) {
 			generaEvento(producto, ProductoEvent.Tipo.SUBE_PRECIO);
 		}
 
@@ -90,10 +90,10 @@ public class ProductoNegocio implements IProductoNegocio {
 			throw new NegocioException(e);
 		}
 	}
-	
+
 	@Autowired
 	private ApplicationEventPublisher appEventPublisher;
-	
+
 	private void generaEvento(Producto producto, ProductoEvent.Tipo tipo) {
 		appEventPublisher.publishEvent(new ProductoEvent(producto, tipo));
 	}
@@ -118,6 +118,40 @@ public class ProductoNegocio implements IProductoNegocio {
 			log.error(e.getMessage(), e);
 			throw new NegocioException(e);
 		}
+	}
+
+	@Override
+	public Producto cargar(String codigoExterno) throws NegocioException, NoEncontradoException {
+		Optional<Producto> op;
+		try {
+			op = productoDAO.findFirstByCodigoExterno(codigoExterno);
+		} catch (Exception e) {
+			throw new NegocioException(e);
+		}
+		if (!op.isPresent()) {
+			throw new NoEncontradoException(
+					"El producto con código externo '" + codigoExterno + "', no se encuentra en la BD");
+		}
+		return op.get();
+	}
+
+	@Override
+	public Producto asegurarProducto(Producto producto) throws NegocioException {
+		Producto p = null;
+		try {
+			p = cargar(producto.getCodigoExterno());
+			p.setPrecio(producto.getPrecio());
+			p.setDescripcion(producto.getDescripcion());
+			// Colocar aquí los datos recibidos del exterior que no sean opcionales
+		} catch (NoEncontradoException e) {
+			p = new Producto(producto);
+		}
+		try {
+			p=productoDAO.save(p);
+		} catch (Exception e) {
+			throw new NegocioException(e);
+		}
+		return p;
 	}
 
 	// @Bean

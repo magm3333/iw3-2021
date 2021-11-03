@@ -20,5 +20,9 @@ public interface IProductoNegocio {
 	public void eliminar(long id) throws NegocioException, NoEncontradoException;
 
 	public List<Rubro> listadoRubros() throws NegocioException;
+	
+	public Producto cargar(String codigoExterno) throws NegocioException, NoEncontradoException;
+	
+	public Producto asegurarProducto(Producto producto) throws NegocioException;
 
 }
