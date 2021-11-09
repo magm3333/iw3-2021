@@ -33,4 +33,8 @@ public class MensajeRespuesta {
 	public String toString() {
 		return String.format("{\"codigo\":%s,\"mensaje\":\"%s\"}", getCodigo(), getMensaje());
 	}
+	
+	// Serializador:    Obj Java --> JSON
+	// Deserializador   JSON     --> Obj Java
+	
 }

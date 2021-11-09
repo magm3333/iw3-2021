@@ -47,7 +47,7 @@ public class OportunidadVentaNegocio implements IOportunidadVentaNegocio {
 	@Override
 	public List<OportunidadVenta> lista() throws NegocioException {
 		try {
-			return oportunidadVentaDAO.findAll(Sort.by("concreatada").and(Sort.by("fechaHora")));
+			return oportunidadVentaDAO.findAll(Sort.by("concretada").and(Sort.by("fechaHora")));
 		} catch (Exception e) {
 			throw new NegocioException(e);
 		}
